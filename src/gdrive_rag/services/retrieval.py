@@ -38,7 +38,7 @@ class RetrievalService:
                 (1 - Chunk.embedding.cosine_distance(query_embedding)).label("score"),
             )
             .join(Document, Chunk.file_id == Document.file_id)
-            .where(Document.is_deleted == False)
+            .where(~Document.is_deleted)
         )
 
         if filters:
