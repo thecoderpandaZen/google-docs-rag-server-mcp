@@ -1,0 +1,23 @@
+# Source configuration for Google Drive indexing
+
+sources:
+  - id: "example-folder-source"
+    name: "Engineering Documentation"
+    type: "folder"
+    enabled: true
+    config:
+      folder_id: "your_folder_id_here"
+      mime_types:
+        - "application/vnd.google-apps.document"
+        - "application/pdf"
+        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    
+  - id: "example-shared-drive"
+    name: "Company Shared Drive"
+    type: "shared_drive"
+    enabled: false
+    config:
+      drive_id: "your_shared_drive_id_here"
+      mime_types:
+        - "application/vnd.google-apps.document"
+        - "application/pdf"

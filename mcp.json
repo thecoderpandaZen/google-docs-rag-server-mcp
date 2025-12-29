@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "gdrive-rag": {
+      "command": "uvicorn",
+      "args": [
+        "gdrive_rag.mcp.server:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8002"
+      ],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "MCP_AUTH_TOKEN": "${MCP_AUTH_TOKEN}",
+        "API_PORT": "8001",
+        "MCP_PORT": "8002"
+      }
+    }
+  }
+}
