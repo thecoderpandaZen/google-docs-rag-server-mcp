@@ -61,7 +61,7 @@ Save to `{@artifacts_path}/plan.md`.
 ### [x] Step: Test the code and plan
 <!-- chat-id: 706f5010-b382-48b0-8033-cbdcec4d163e -->
 
-### [ ] Step: Push the code to this repo
+### [x] Step: Push the code to this repo
 <!-- chat-id: b3ddff35-5c7c-4002-84f1-0b4f4f51862c -->
 
 echo "# google-docs-rag-server-mcp" >> README.md
