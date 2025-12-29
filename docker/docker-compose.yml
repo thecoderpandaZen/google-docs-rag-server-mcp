@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: gdrive-rag-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gdrive_rag
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.api
+    container_name: gdrive-rag-api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/gdrive_rag
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      API_HOST: 0.0.0.0
+      API_PORT: 8001
+      LOG_LEVEL: INFO
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../src:/app/src
+    command: uvicorn gdrive_rag.api.main:app --host 0.0.0.0 --port 8001 --reload
+
+  indexer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.indexer
+    container_name: gdrive-rag-indexer
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/gdrive_rag
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GOOGLE_SERVICE_ACCOUNT_FILE: ${GOOGLE_SERVICE_ACCOUNT_FILE:-}
+      LOG_LEVEL: INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ../src:/app/src
+      - ${GOOGLE_SERVICE_ACCOUNT_FILE}:/app/service_account.json:ro
+    command: tail -f /dev/null
+
+volumes:
+  postgres_data:

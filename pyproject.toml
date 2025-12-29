@@ -1,0 +1,96 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gdrive-rag"
+version = "0.1.0"
+description = "Google Drive RAG server with MCP tooling"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "sqlalchemy[asyncio]>=2.0.23",
+    "asyncpg>=0.29.0",
+    "pgvector>=0.2.3",
+    "alembic>=1.12.1",
+    "pydantic>=2.5.0",
+    "pydantic-settings>=2.1.0",
+    "google-auth>=2.25.0",
+    "google-auth-oauthlib>=1.1.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-api-python-client>=2.110.0",
+    "openai>=1.6.0",
+    "beautifulsoup4>=4.12.2",
+    "lxml>=4.9.3",
+    "PyPDF2>=3.0.1",
+    "python-docx>=1.1.0",
+    "prefect>=2.14.0",
+    "structlog>=23.2.0",
+    "prometheus-client>=0.19.0",
+    "python-multipart>=0.0.6",
+    "httpx>=0.25.2",
+    "tenacity>=8.2.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-asyncio>=0.21.1",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.2",
+    "ruff>=0.1.7",
+    "mypy>=1.7.1",
+    "types-beautifulsoup4>=4.12.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --strict-markers"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+ignore = [
+    "E501", # line too long (handled by formatter)
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+[[tool.mypy.overrides]]
+module = [
+    "googleapiclient.*",
+    "google.auth.*",
+    "google.oauth2.*",
+    "prefect.*",
+    "prometheus_client.*",
+    "PyPDF2.*",
+    "docx.*",
+]
+ignore_missing_imports = true
