@@ -1,7 +1,6 @@
 """Embedding generation service using OpenAI."""
 
 import logging
-from typing import List
 
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -22,16 +21,17 @@ class EmbeddingService:
         wait=wait_exponential(multiplier=1, min=4, max=60),
         reraise=True,
     )
-    def embed_texts(self, texts: List[str]) -> List[List[float]]:
+    def embed_texts(self, texts: list[str]) -> list[list[float]]:
         if not texts:
             return []
 
-        all_embeddings: List[List[float]] = []
+        all_embeddings: list[list[float]] = []
 
         for i in range(0, len(texts), self.batch_size):
             batch = texts[i : i + self.batch_size]
-            logger.info(f"Generating embeddings for batch {i // self.batch_size + 1} "
-                       f"({len(batch)} texts)")
+            logger.info(
+                f"Generating embeddings for batch {i // self.batch_size + 1} ({len(batch)} texts)"
+            )
 
             try:
                 response = self.client.embeddings.create(
@@ -55,6 +55,6 @@ class EmbeddingService:
         wait=wait_exponential(multiplier=1, min=4, max=60),
         reraise=True,
     )
-    def embed_text(self, text: str) -> List[float]:
+    def embed_text(self, text: str) -> list[float]:
         embeddings = self.embed_texts([text])
         return embeddings[0] if embeddings else []

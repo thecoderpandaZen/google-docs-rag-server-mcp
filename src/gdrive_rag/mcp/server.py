@@ -1,11 +1,9 @@
 """MCP Server implementation."""
 
-import json
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from fastapi import FastAPI, HTTPException, Request, Security
-from fastapi.responses import StreamingResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from gdrive_rag.config import settings
@@ -41,7 +39,7 @@ async def verify_mcp_auth(
 
 
 @app.get("/mcp/tools")
-async def list_tools() -> Dict[str, Any]:
+async def list_tools() -> dict[str, Any]:
     tools = [
         {
             "name": "search_docs",
@@ -110,7 +108,7 @@ async def list_tools() -> Dict[str, Any]:
 async def call_tool(
     tool_name: str,
     request: Request,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     try:
         body = await request.json()
         tool_input = body.get("input", {})

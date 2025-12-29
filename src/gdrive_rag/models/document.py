@@ -1,9 +1,9 @@
 """Document model for indexed files."""
 
 from datetime import datetime
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, ForeignKey, String, TIMESTAMP, Text
+from sqlalchemy import TIMESTAMP, Boolean, ForeignKey, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,6 +33,6 @@ class Document(Base):
     is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     source: Mapped["Source"] = relationship(back_populates="documents")
-    chunks: Mapped[List["Chunk"]] = relationship(
+    chunks: Mapped[list["Chunk"]] = relationship(
         back_populates="document", cascade="all, delete-orphan"
     )

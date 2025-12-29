@@ -1,10 +1,8 @@
 """Hybrid retrieval service with vector search."""
 
 import logging
-from datetime import datetime
-from typing import List, Optional
 
-from sqlalchemy import select, and_, or_, desc
+from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gdrive_rag.models import Chunk, Document
@@ -22,9 +20,9 @@ class RetrievalService:
     async def search(
         self,
         query: str,
-        filters: Optional[SearchFilters] = None,
+        filters: SearchFilters | None = None,
         top_k: int = 10,
-    ) -> List[SearchResult]:
+    ) -> list[SearchResult]:
         query_embedding = self.embedding_service.embed_text(query)
 
         stmt = (

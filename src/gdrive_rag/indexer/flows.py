@@ -3,11 +3,10 @@
 import logging
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from prefect import flow
 from sqlalchemy import select, update
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from gdrive_rag.db.session import async_session_factory
 from gdrive_rag.indexer.tasks import (
@@ -30,9 +29,9 @@ SUPPORTED_MIME_TYPES = [
 
 
 @flow(name="full-crawl", log_prints=True)
-async def full_crawl_flow(source_id: str) -> Dict[str, Any]:
+async def full_crawl_flow(source_id: str) -> dict[str, Any]:
     job_id = uuid.uuid4()
-    stats: Dict[str, Any] = {
+    stats: dict[str, Any] = {
         "files_processed": 0,
         "files_failed": 0,
         "chunks_created": 0,
@@ -143,9 +142,9 @@ async def full_crawl_flow(source_id: str) -> Dict[str, Any]:
 
 
 @flow(name="incremental-update", log_prints=True)
-async def incremental_update_flow(source_id: str) -> Dict[str, Any]:
+async def incremental_update_flow(source_id: str) -> dict[str, Any]:
     job_id = uuid.uuid4()
-    stats: Dict[str, Any] = {
+    stats: dict[str, Any] = {
         "files_processed": 0,
         "files_failed": 0,
         "chunks_created": 0,

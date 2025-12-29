@@ -1,10 +1,8 @@
 """Google Drive API client wrapper."""
 
 import logging
-import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
-from google.auth.transport.requests import Request
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -46,10 +44,10 @@ class GoogleDriveService:
     )
     def list_files(
         self,
-        folder_id: Optional[str] = None,
-        mime_types: Optional[List[str]] = None,
-        page_token: Optional[str] = None,
-    ) -> Dict[str, Any]:
+        folder_id: str | None = None,
+        mime_types: list[str] | None = None,
+        page_token: str | None = None,
+    ) -> dict[str, Any]:
         query_parts = []
 
         if folder_id:
@@ -85,7 +83,7 @@ class GoogleDriveService:
         wait=wait_exponential(multiplier=1, min=4, max=60),
         reraise=True,
     )
-    def get_file_metadata(self, file_id: str) -> Dict[str, Any]:
+    def get_file_metadata(self, file_id: str) -> dict[str, Any]:
         try:
             file_metadata = (
                 self.drive_service.files()
@@ -125,7 +123,7 @@ class GoogleDriveService:
         wait=wait_exponential(multiplier=1, min=4, max=60),
         reraise=True,
     )
-    def get_document(self, document_id: str) -> Dict[str, Any]:
+    def get_document(self, document_id: str) -> dict[str, Any]:
         try:
             document = self.docs_service.documents().get(documentId=document_id).execute()
             return document
@@ -146,9 +144,7 @@ class GoogleDriveService:
         wait=wait_exponential(multiplier=1, min=4, max=60),
         reraise=True,
     )
-    def list_changes(
-        self, page_token: str, page_size: int = 100
-    ) -> Dict[str, Any]:
+    def list_changes(self, page_token: str, page_size: int = 100) -> dict[str, Any]:
         try:
             response = (
                 self.drive_service.changes()

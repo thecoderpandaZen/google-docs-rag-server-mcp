@@ -2,10 +2,10 @@
 
 import logging
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 from prefect import task
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from gdrive_rag.indexer.extractors.docx import DOCXExtractor
@@ -22,10 +22,10 @@ logger = logging.getLogger(__name__)
 @task(retries=3, retry_delay_seconds=60)
 def enumerate_files(
     drive_service: GoogleDriveService,
-    folder_id: Optional[str] = None,
-    mime_types: Optional[List[str]] = None,
-) -> List[Dict[str, Any]]:
-    all_files: List[Dict[str, Any]] = []
+    folder_id: str | None = None,
+    mime_types: list[str] | None = None,
+) -> list[dict[str, Any]]:
+    all_files: list[dict[str, Any]] = []
     page_token = None
 
     while True:
@@ -51,7 +51,7 @@ def extract_content(
     drive_service: GoogleDriveService,
     file_id: str,
     mime_type: str,
-) -> Optional[str]:
+) -> str | None:
     try:
         if mime_type == "application/vnd.google-apps.document":
             extractor = GoogleDocsExtractor(drive_service)
@@ -75,7 +75,7 @@ def extract_content(
 def chunk_document(
     content: str,
     is_html: bool = False,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     chunking_service = ChunkingService()
 
     if is_html:
@@ -97,7 +97,7 @@ def chunk_document(
 
 
 @task(retries=3, retry_delay_seconds=60)
-def generate_embeddings(texts: List[str]) -> List[List[float]]:
+def generate_embeddings(texts: list[str]) -> list[list[float]]:
     embedding_service = EmbeddingService()
     embeddings = embedding_service.embed_texts(texts)
 
@@ -110,9 +110,9 @@ async def upsert_chunks(
     session: AsyncSession,
     file_id: str,
     source_id: str,
-    file_metadata: Dict[str, Any],
-    chunks_data: List[Dict[str, Any]],
-    embeddings: List[List[float]],
+    file_metadata: dict[str, Any],
+    chunks_data: list[dict[str, Any]],
+    embeddings: list[list[float]],
 ) -> int:
     try:
         await session.execute(delete(Chunk).where(Chunk.file_id == file_id))

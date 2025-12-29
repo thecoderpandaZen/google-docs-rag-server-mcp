@@ -38,9 +38,7 @@ async def reindex_source(
     session: AsyncSession = Depends(get_session),
 ) -> ReindexResponse:
     try:
-        result = await session.execute(
-            select(Source).where(Source.id == request.source_id)
-        )
+        result = await session.execute(select(Source).where(Source.id == request.source_id))
         source = result.scalar_one_or_none()
 
         if not source:

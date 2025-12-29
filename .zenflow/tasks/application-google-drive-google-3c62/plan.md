@@ -57,6 +57,9 @@ Save to `{@artifacts_path}/plan.md`.
 ### [x] Step: Implement the plan
 <!-- chat-id: 79cb7602-4a21-412f-9fcd-7a4e640869bd -->
 <!-- agent: ZEN_CLI -->
+
+### [x] Step: Test the code and plan
+<!-- chat-id: 706f5010-b382-48b0-8033-cbdcec4d163e -->
 ## Implementation Tasks
 
 ### Phase 1: Foundation (Database, Models, API Structure)

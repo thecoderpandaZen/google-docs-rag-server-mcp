@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from gdrive_rag.api.deps import get_session, verify_api_key
-from gdrive_rag.models import Chunk, Document
+from gdrive_rag.models import Document
 from gdrive_rag.schemas.document import ChunkMetadata, DocumentMetadata, DocumentResponse
 
 logger = logging.getLogger(__name__)

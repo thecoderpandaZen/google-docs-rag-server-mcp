@@ -2,7 +2,6 @@
 
 import logging
 from datetime import datetime
-from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -26,7 +25,7 @@ class ChangeEntry(BaseModel):
 
 
 class ChangesResponse(BaseModel):
-    changes: List[ChangeEntry]
+    changes: list[ChangeEntry]
     total: int
 
 

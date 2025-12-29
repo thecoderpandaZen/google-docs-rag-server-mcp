@@ -2,10 +2,10 @@
 
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from pgvector.sqlalchemy import Vector
-from sqlalchemy import ForeignKey, Index, Integer, String, Text, TIMESTAMP
+from sqlalchemy import TIMESTAMP, ForeignKey, Index, Integer, String, Text
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -27,7 +27,7 @@ class Chunk(Base):
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     embedding: Mapped[list] = mapped_column(Vector(1536), nullable=False)
-    parent_heading: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    parent_heading: Mapped[str | None] = mapped_column(String(512), nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), default=datetime.utcnow, nullable=False
     )

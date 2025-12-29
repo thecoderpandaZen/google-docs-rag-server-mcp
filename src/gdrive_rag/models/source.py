@@ -2,7 +2,7 @@
 
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import TIMESTAMP, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -27,8 +27,8 @@ class Source(Base):
     updated_at: Mapped[datetime] = mapped_column(
         TIMESTAMP(timezone=True), default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False
     )
-    last_indexed_at: Mapped[Optional[datetime]] = mapped_column(
+    last_indexed_at: Mapped[datetime | None] = mapped_column(
         TIMESTAMP(timezone=True), nullable=True
     )
 
-    documents: Mapped[List["Document"]] = relationship(back_populates="source")
+    documents: Mapped[list["Document"]] = relationship(back_populates="source")

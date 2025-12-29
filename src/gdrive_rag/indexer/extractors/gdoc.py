@@ -1,7 +1,6 @@
 """Google Docs text extractor."""
 
 import logging
-from typing import Optional
 
 from bs4 import BeautifulSoup
 
@@ -15,7 +14,7 @@ class GoogleDocsExtractor(Extractor):
     def __init__(self, drive_service: GoogleDriveService) -> None:
         self.drive_service = drive_service
 
-    def extract(self, file_id: str, mime_type: str) -> Optional[str]:
+    def extract(self, file_id: str, mime_type: str) -> str | None:
         try:
             html_content = self.drive_service.get_file_content(file_id, mime_type)
 

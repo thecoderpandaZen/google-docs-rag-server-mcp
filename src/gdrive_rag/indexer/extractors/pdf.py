@@ -2,7 +2,6 @@
 
 import logging
 from io import BytesIO
-from typing import Optional
 
 from PyPDF2 import PdfReader
 
@@ -16,7 +15,7 @@ class PDFExtractor(Extractor):
     def __init__(self, drive_service: GoogleDriveService) -> None:
         self.drive_service = drive_service
 
-    def extract(self, file_id: str, mime_type: str) -> Optional[str]:
+    def extract(self, file_id: str, mime_type: str) -> str | None:
         try:
             pdf_bytes = self.drive_service.get_file_content(file_id, mime_type)
 

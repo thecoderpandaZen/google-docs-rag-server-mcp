@@ -1,8 +1,8 @@
 """Common dependencies for API endpoints."""
 
-from typing import AsyncGenerator
+from collections.abc import AsyncGenerator
 
-from fastapi import Depends, HTTPException, Security, status
+from fastapi import HTTPException, Security, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,13 +22,13 @@ async def verify_api_key(
 ) -> None:
     if not settings.api_key:
         return
-    
+
     if not credentials:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Missing authentication credentials",
         )
-    
+
     if credentials.credentials != settings.api_key:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

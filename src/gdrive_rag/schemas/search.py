@@ -1,21 +1,20 @@
 """Search request and response schemas."""
 
 from datetime import datetime
-from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
 
 class SearchFilters(BaseModel):
-    source_ids: Optional[List[str]] = None
-    mime_types: Optional[List[str]] = None
-    modified_after: Optional[datetime] = None
+    source_ids: list[str] | None = None
+    mime_types: list[str] | None = None
+    modified_after: datetime | None = None
 
 
 class SearchRequest(BaseModel):
     query: str = Field(min_length=1, max_length=1000)
     top_k: int = Field(default=10, ge=1, le=100)
-    filters: Optional[SearchFilters] = None
+    filters: SearchFilters | None = None
 
 
 class SearchResult(BaseModel):
@@ -30,6 +29,6 @@ class SearchResult(BaseModel):
 
 
 class SearchResponse(BaseModel):
-    results: List[SearchResult]
+    results: list[SearchResult]
     query: str
     total: int

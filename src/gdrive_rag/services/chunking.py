@@ -2,9 +2,8 @@
 
 import logging
 import re
-from typing import List, Optional
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup
 
 from gdrive_rag.config import settings
 
@@ -16,7 +15,7 @@ class ChunkResult:
         self,
         text: str,
         index: int,
-        parent_heading: Optional[str] = None,
+        parent_heading: str | None = None,
     ) -> None:
         self.text = text
         self.index = index
@@ -32,17 +31,17 @@ class ChunkingService:
         self.target_size = target_size
         self.overlap = overlap
 
-    def chunk_html(self, html_content: str) -> List[ChunkResult]:
+    def chunk_html(self, html_content: str) -> list[ChunkResult]:
         soup = BeautifulSoup(html_content, "html.parser")
         return self._chunk_document(soup)
 
-    def chunk_text(self, text_content: str) -> List[ChunkResult]:
+    def chunk_text(self, text_content: str) -> list[ChunkResult]:
         return self._chunk_plain_text(text_content)
 
-    def _chunk_document(self, soup: BeautifulSoup) -> List[ChunkResult]:
-        chunks: List[ChunkResult] = []
+    def _chunk_document(self, soup: BeautifulSoup) -> list[ChunkResult]:
+        chunks: list[ChunkResult] = []
         current_heading = None
-        current_text_parts: List[str] = []
+        current_text_parts: list[str] = []
         chunk_index = 0
 
         for element in soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p"]):
@@ -85,12 +84,12 @@ class ChunkingService:
 
         return chunks
 
-    def _chunk_plain_text(self, text: str) -> List[ChunkResult]:
-        chunks: List[ChunkResult] = []
+    def _chunk_plain_text(self, text: str) -> list[ChunkResult]:
+        chunks: list[ChunkResult] = []
         chunk_index = 0
 
         paragraphs = text.split("\n\n")
-        current_text_parts: List[str] = []
+        current_text_parts: list[str] = []
 
         for paragraph in paragraphs:
             paragraph = paragraph.strip()
@@ -124,15 +123,15 @@ class ChunkingService:
         self,
         text: str,
         start_index: int,
-        parent_heading: Optional[str],
-    ) -> List[ChunkResult]:
+        parent_heading: str | None,
+    ) -> list[ChunkResult]:
         if len(text) <= self.target_size:
             return [ChunkResult(text, start_index, parent_heading)]
 
-        chunks: List[ChunkResult] = []
+        chunks: list[ChunkResult] = []
         sentences = self._split_sentences(text)
 
-        current_chunk: List[str] = []
+        current_chunk: list[str] = []
         current_length = 0
 
         for sentence in sentences:
@@ -140,11 +139,11 @@ class ChunkingService:
 
             if current_length + sentence_length > self.target_size and current_chunk:
                 chunk_text = " ".join(current_chunk)
-                chunks.append(
-                    ChunkResult(chunk_text, start_index + len(chunks), parent_heading)
-                )
+                chunks.append(ChunkResult(chunk_text, start_index + len(chunks), parent_heading))
 
-                overlap_text = chunk_text[-self.overlap :] if len(chunk_text) > self.overlap else chunk_text
+                overlap_text = (
+                    chunk_text[-self.overlap :] if len(chunk_text) > self.overlap else chunk_text
+                )
                 current_chunk = [overlap_text] if overlap_text else []
                 current_length = len(overlap_text)
 
@@ -153,13 +152,11 @@ class ChunkingService:
 
         if current_chunk:
             chunk_text = " ".join(current_chunk)
-            chunks.append(
-                ChunkResult(chunk_text, start_index + len(chunks), parent_heading)
-            )
+            chunks.append(ChunkResult(chunk_text, start_index + len(chunks), parent_heading))
 
         return chunks
 
-    def _split_sentences(self, text: str) -> List[str]:
+    def _split_sentences(self, text: str) -> list[str]:
         sentence_pattern = r"(?<=[.!?])\s+"
         sentences = re.split(sentence_pattern, text)
         return [s.strip() for s in sentences if s.strip()]

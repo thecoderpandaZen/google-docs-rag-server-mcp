@@ -1,7 +1,6 @@
 """Document schemas."""
 
 from datetime import datetime
-from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -10,7 +9,7 @@ class ChunkMetadata(BaseModel):
     chunk_id: str
     chunk_index: int
     chunk_text: str
-    parent_heading: Optional[str] = None
+    parent_heading: str | None = None
     created_at: datetime
 
 
@@ -26,4 +25,4 @@ class DocumentMetadata(BaseModel):
 
 class DocumentResponse(BaseModel):
     metadata: DocumentMetadata
-    chunks: List[ChunkMetadata]
+    chunks: list[ChunkMetadata]

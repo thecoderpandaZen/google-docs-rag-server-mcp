@@ -2,9 +2,8 @@
 
 import uuid
 from datetime import datetime
-from typing import Optional
 
-from sqlalchemy import ForeignKey, Index, String, Text, TIMESTAMP
+from sqlalchemy import TIMESTAMP, ForeignKey, Index, String, Text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -21,11 +20,9 @@ class IndexJob(Base):
         UUID(as_uuid=True), ForeignKey("sources.id"), nullable=False
     )
     status: Mapped[str] = mapped_column(String(50), nullable=False)
-    started_at: Mapped[Optional[datetime]] = mapped_column(TIMESTAMP(timezone=True), nullable=True)
-    completed_at: Mapped[Optional[datetime]] = mapped_column(
-        TIMESTAMP(timezone=True), nullable=True
-    )
-    error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    started_at: Mapped[datetime | None] = mapped_column(TIMESTAMP(timezone=True), nullable=True)
+    completed_at: Mapped[datetime | None] = mapped_column(TIMESTAMP(timezone=True), nullable=True)
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
     stats: Mapped[dict] = mapped_column(JSONB, default=dict, nullable=False)
 
     __table_args__ = (

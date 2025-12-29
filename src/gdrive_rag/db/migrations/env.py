@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from gdrive_rag.config import settings
 from gdrive_rag.models.base import Base
-from gdrive_rag.models import Source, Document, Chunk, IndexJob
 
 config = context.config
 

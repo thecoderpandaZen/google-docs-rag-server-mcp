@@ -1,7 +1,7 @@
 """Search documents MCP tool."""
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import httpx
 
@@ -10,7 +10,7 @@ from gdrive_rag.config import settings
 logger = logging.getLogger(__name__)
 
 
-async def execute(tool_input: Dict[str, Any]) -> Dict[str, Any]:
+async def execute(tool_input: dict[str, Any]) -> dict[str, Any]:
     query = tool_input.get("query")
     max_results = tool_input.get("max_results", 10)
 

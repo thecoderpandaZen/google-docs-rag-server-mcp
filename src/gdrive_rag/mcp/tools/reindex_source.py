@@ -1,7 +1,7 @@
 """Reindex source MCP tool."""
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 import httpx
 
@@ -10,7 +10,7 @@ from gdrive_rag.config import settings
 logger = logging.getLogger(__name__)
 
 
-async def execute(tool_input: Dict[str, Any]) -> Dict[str, Any]:
+async def execute(tool_input: dict[str, Any]) -> dict[str, Any]:
     source_id = tool_input.get("source_id")
     full_reindex = tool_input.get("full_reindex", False)
 
